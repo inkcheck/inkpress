@@ -8,4 +8,10 @@
   --border: #393939;
   --section-bg: #002d9c;
   --section-fg: #ffffff;
+  /* Callout and box tones: note, tip, important, warning, caution. */
+  --note: #78a9ff;
+  --tip: #42be65;
+  --important: #a56eff;
+  --warning: #f1c21b;
+  --caution: #fa4d56;
 }

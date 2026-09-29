@@ -1,0 +1,6 @@
+<div class="frame">
+  {{with .Heading}}<div class="heading">{{.}}</div>{{end}}
+  <div class="body">{{.Body}}</div>
+</div>
+<div class="picture">{{with .Image}}<img src="{{.}}" alt="">{{end}}</div>
+{{.Footer}}

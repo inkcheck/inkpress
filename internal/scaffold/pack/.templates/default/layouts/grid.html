@@ -1,0 +1,8 @@
+{{.Header}}
+<div class="frame">
+  {{with .Heading}}<div class="heading">{{.}}</div>{{end}}
+  <div class="grid grid-{{len .Columns}}">
+    {{range .Columns}}<div class="card">{{.}}</div>{{end}}
+  </div>
+</div>
+{{.Footer}}

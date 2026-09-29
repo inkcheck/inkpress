@@ -20,7 +20,8 @@ assets/                images the slides use (jpg, png, svg)
 
 ```markdown
 ---
-layout: two-column      # title, section, content, two-column, image, quote, blank
+layout: two-column      # title, section, agenda, content, two-column, grid,
+                        # statement, image, image-left, image-full, quote, blank
 theme: dark             # light or dark
 ---
 
@@ -40,6 +41,12 @@ Frontmatter keys: `template`, `layout`, `theme`, `title`, `class` (extra CSS
 classes), `background` (a colour, gradient or image path), `image` (for the
 image layout), `header` and `footer` (`false` hides them), `skip` (`true`
 leaves the slide out). Layouts can read any other key as `.Meta.<key>`.
+
+Put Markdown between `::: box` and `:::` lines to make a box; `card`, `row`,
+`stat`, `figure` and `gallery` work the same way, and `note`, `tip`,
+`important`, `warning` and `caution` colour them. A blockquote that starts
+with `> [!NOTE]` (or `[!TIP]`, `[!WARNING]`, …) is a callout. See
+`slides/06-boxes.md`.
 
 Images resolve against the slide (`../assets/chart.svg`) or the pack
 (`assets/chart.svg`).

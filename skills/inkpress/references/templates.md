@@ -112,6 +112,14 @@ selectors for `.slide` and its descendants:
 - **Code blocks** are `<pre class="chroma">` with Chroma classes. The
   template's `pre` rule can set a background with `!important` to override
   the Chroma style's background.
+- **Blocks** from `::: a b` lines are `<div class="a b">`, and callouts are
+  `<blockquote class="callout <kind>">` whose first child is
+  `<p class="callout-title">`. The kind is the lower-cased marker (`note`,
+  `tip`, …) and any other word works too. Style every class the skill
+  documents (`box`, `card`, `row`, `stat`, `figure`, `gallery`, the five
+  tones, `lead`, `muted`, `center`) so decks keep working when they switch
+  templates. The default template gives each tone a theme property
+  (`--note`, `--tip`, …) and sets `--tone` from it.
 - **Inkline diagrams** are `<figure class="diagram"><img …></figure>`. Give the
   figure `flex: 1; min-height: 0` in a column flexbox, and the img
   `max-height: 100%; object-fit: contain`, so diagrams fit the space left.

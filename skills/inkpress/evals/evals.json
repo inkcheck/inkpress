@@ -55,6 +55,21 @@
         "Slide 05 sets layout: metrics",
         "inkpress pdf succeeds"
       ]
+    },
+    {
+      "id": 5,
+      "prompt": "Make a 6-slide product update deck in ./update: an agenda, a slide with our three new features (offline mode, SSO, audit log) side by side, a slide with the headline number 'p99 latency down 38%', a full-bleed photo slide using assets/team.jpg, a warning that the v1 API is deprecated on 1 March, and a customer quote from Dana Ruiz, Head of IT at Northwind. Build the PDF.",
+      "expected_output": "A pack that uses the agenda, grid, statement (or a stat block), image-full and quote layouts, a [!WARNING] callout or a warning box for the deprecation, and a built PDF.",
+      "files": [],
+      "assertions": [
+        "A slide uses layout: agenda with a numbered list",
+        "The three features are cards on a layout: grid slide, split by ||| lines, or in ::: card blocks inside ::: row",
+        "The latency number is on a layout: statement slide or in a ::: stat block",
+        "The photo slide uses layout: image-full with image pointing at assets/team.jpg",
+        "The deprecation uses > [!WARNING] or a ::: box warning block",
+        "The quote slide uses layout: quote with cite and role set",
+        "inkpress pdf ./update succeeds"
+      ]
     }
   ]
 }

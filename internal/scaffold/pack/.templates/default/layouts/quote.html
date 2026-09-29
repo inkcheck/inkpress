@@ -1,5 +1,6 @@
+{{with .Image}}<div class="picture"><img src="{{.}}" alt=""></div>{{end}}
 <div class="frame">
   {{.Content}}
-  {{with .Meta.cite}}<p class="cite">— {{.}}</p>{{end}}
+  {{with .Meta.cite}}<p class="cite">— {{.}}{{with $.Meta.role}}<span class="role">{{.}}</span>{{end}}</p>{{end}}
 </div>
 {{.Footer}}

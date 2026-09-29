@@ -87,7 +87,7 @@ Speaker notes: everything after the !-- line. Never rendered.
   | `title` | slide title; default is the leading heading |
   | `class` | extra CSS classes on the slide |
   | `background` | a colour, a gradient, or an image path (cover) |
-  | `image` | image path for layouts that use one (`image`) |
+  | `image` | image path for layouts that use one (`image`, `image-left`, `image-full`, `quote`) |
   | `header`, `footer` | `false` hides them |
   | `skip` | `true` leaves the slide out of the build |
 
@@ -95,6 +95,7 @@ Speaker notes: everything after the !-- line. Never rendered.
 - **The leading `#` or `##` heading** becomes `.Heading`. Layouts place it
   separately from the body, so start each content slide with one heading.
 - **`|||` lines** split the body into columns.
+- **`:::` lines** wrap Markdown in a styled block; see Boxes and callouts.
 - **`!--` line** starts the notes. It is ignored inside code blocks.
 - **Markdown** is GitHub-flavoured: tables, task lists, strikethrough,
   autolinks and raw HTML. Code blocks with a language are highlighted.
@@ -106,15 +107,61 @@ Speaker notes: everything after the !-- line. Never rendered.
 | Layout | For | Reads |
 |---|---|---|
 | `title` | the opening slide | `# Title`, `subtitle`; shows author and date from settings; no header or footer |
+| `agenda` | the list of parts, big numbered items | `# Agenda`, a list; `current: N` highlights item N (repeat it before each part) |
 | `section` | a divider between parts, on an accent background | `# Section name`, `kicker` (small text above) |
 | `content` | the default: heading and body | |
 | `two-column` | comparisons, text beside code or an image | columns split by `\|\|\|` |
+| `grid` | 2–8 parallel points, features or options, each in a card | `# Heading`, cards split by `\|\|\|`, each starting `### Title` |
+| `statement` | one big claim or number, centred | `# The line`, optional paragraph, `kicker`; `**bold**` in the heading takes the accent colour |
 | `image` | text on the left half, a picture filling the right half | `image: ../assets/x.jpg` |
-| `quote` | one large quotation | a `>` blockquote, `cite` |
+| `image-left` | the same, picture on the left | `image` |
+| `image-full` | a photo filling the slide, heading and a line of text over it | `image`; keep the text short |
+| `quote` | one large quotation, with an optional portrait beside it | a `>` blockquote, `cite`, `role`, `image` |
 | `blank` | full-bleed content, no padding, no header or footer | |
 
 Themes: `light` and `dark`. Set one per slide with `theme: dark`, for example
 for a closing slide or a quote.
+
+## Boxes and callouts
+
+Wrap Markdown in `:::` lines to put it in a styled block. The words after
+`:::` are CSS classes; blocks nest; a bare `:::` closes the innermost one.
+
+````markdown
+# Results
+
+> [!TIP]
+> A callout: GitHub's syntax. Also [!NOTE], [!IMPORTANT], [!WARNING],
+> [!CAUTION]. `> [!TIP] Custom title` replaces the title.
+
+::: row
+::: stat
+# 42%
+fewer review rounds
+:::
+::: box warning
+### Caveat
+Measured on one team.
+:::
+:::
+````
+
+Classes in the default template:
+
+| Class | Use |
+|---|---|
+| `box` | a shaded panel with an accent edge; a leading `###` becomes its label |
+| `card` | a shaded panel with an accent top; the `grid` layout wraps each column in one |
+| `row` | puts the blocks inside it side by side, equal widths |
+| `stat` | a big number (a heading) over a short line of text |
+| `figure` | an image, then a caption paragraph |
+| `gallery` | images in a row, cropped to the same shape |
+| `note`, `tip`, `important`, `warning`, `caution` | the tone of a `box`, `card` or `stat` |
+| `lead`, `muted`, `center` | larger intro text, grey text, centred text |
+
+A block cannot span a `|||` line. Put blocks inside columns instead. Prefer a
+layout (`grid`, `statement`) over rebuilding one with blocks, and use at most
+one callout per slide.
 
 ## Fitting content
 

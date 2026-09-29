@@ -31,7 +31,10 @@ func (r *renderer) markdown(s *deck.Slide) func(string) (template.HTML, error) {
 		),
 		goldmark.WithParserOptions(
 			parser.WithAutoHeadingID(),
-			parser.WithASTTransformers(util.Prioritized(&images{r: r, s: s}, 100)),
+			parser.WithASTTransformers(
+				util.Prioritized(&images{r: r, s: s}, 100),
+				util.Prioritized(callouts{}, 200),
+			),
 		),
 		// Slides are the author's own; raw HTML is allowed.
 		goldmark.WithRendererOptions(gmhtml.WithUnsafe()),
@@ -41,7 +44,7 @@ func (r *renderer) markdown(s *deck.Slide) func(string) (template.HTML, error) {
 			return "", nil
 		}
 		var b bytes.Buffer
-		if err := gm.Convert([]byte(src), &b); err != nil {
+		if err := gm.Convert([]byte(divs(src)), &b); err != nil {
 			return "", fmt.Errorf("%s: %w", s.Path, err)
 		}
 		return template.HTML(b.String()), nil

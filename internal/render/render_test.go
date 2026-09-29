@@ -43,7 +43,14 @@ func TestSamplePack(t *testing.T) {
 		`@scope (.tpl-default.theme-dark)`,
 		`assets/chart.svg`,
 		`class="chroma"`,
-		`2 / 8`,
+		`2 / 13`,
+		`class="slide layout-grid"`,
+		`<div class="grid grid-3">`,
+		`<div class="agenda" data-current="2">`,
+		`<blockquote class="callout tip">`,
+		`<div class="stat tip">`,
+		`class="slide layout-image-full"`,
+		`<span class="role">`,
 	} {
 		if !strings.Contains(html, want) {
 			t.Errorf("HTML lacks %q", want)

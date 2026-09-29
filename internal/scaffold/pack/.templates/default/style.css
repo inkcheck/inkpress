@@ -103,6 +103,75 @@ th { font-weight: 600; border-bottom: 2px solid var(--fg); }
 .diagram img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 
+/*
+ * Blocks. "::: box note" in a slide becomes <div class="box note">, and
+ * "> [!NOTE]" a <blockquote class="callout note"> whose first paragraph is
+ * .callout-title. The tone classes pick a colour from the theme.
+ */
+.note { --tone: var(--note); }
+.tip { --tone: var(--tip); }
+.important { --tone: var(--important); }
+.warning { --tone: var(--warning); }
+.caution { --tone: var(--caution); }
+
+.box, .callout {
+  margin: 0 0 0.7em;
+  padding: 2.2cqh 3cqh;
+  background: var(--surface);
+  border-left: 0.6cqh solid var(--tone, var(--accent));
+  color: var(--fg);
+}
+.box > :last-child, .callout > :last-child, .card > :last-child, .stat > :last-child { margin-bottom: 0; }
+.callout-title, .box > h3:first-child, .box > h4:first-child {
+  margin: 0 0 0.4em;
+  font-size: 2.3cqh;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--tone, var(--accent));
+}
+
+.card {
+  padding: 2.6cqh 2.8cqh;
+  background: var(--surface);
+  border-top: 0.6cqh solid var(--tone, var(--accent));
+  font-size: 0.9em;
+}
+.card h2, .card h3 { font-size: 3.4cqh; margin-bottom: 0.4em; }
+.card img { display: block; max-width: 100%; max-height: 30cqh; margin: 0 auto 1.6cqh; object-fit: contain; }
+.card .figure img, .card .gallery img { margin: 0; max-height: 24cqh; }
+
+/* ::: row puts the blocks inside it side by side. */
+.row { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3cqw; margin: 0 0 0.7em; }
+.row > * { margin-bottom: 0; }
+
+/* ::: stat: a big number (a heading) over a line of text. */
+.stat > h1:first-child, .stat > h2:first-child, .stat > h3:first-child {
+  margin: 0 0 0.15em;
+  font-size: 10cqh;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--tone, var(--accent));
+}
+.stat p { color: var(--muted); }
+
+/* ::: figure: an image, then its caption. */
+.figure { margin: 0 0 0.7em; min-height: 0; display: flex; flex-direction: column; }
+.figure p:has(img) { margin: 0; min-height: 0; flex: 1; display: flex; justify-content: center; }
+.figure img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.figure > p:not(:has(img)) { margin: 1.2cqh 0 0; font-size: 2.2cqh; color: var(--muted); text-align: center; }
+
+/* ::: gallery: images in a row, cropped to the same shape. */
+.gallery { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 2cqw; margin: 0 0 0.7em; }
+.gallery p { display: contents; }
+.gallery img { width: 100%; height: 100%; max-height: 46cqh; aspect-ratio: 4 / 3; object-fit: cover; }
+
+/* Text helpers. */
+.lead { font-size: 4cqh; line-height: 1.35; }
+.muted { color: var(--muted); }
+.center { text-align: center; }
+
 /* Layout: title */
 .layout-title .frame { justify-content: space-between; }
 .layout-title .logo { width: 5cqh; height: 5cqh; }
@@ -129,11 +198,75 @@ th { font-weight: 600; border-bottom: 2px solid var(--fg); }
 .layout-image .picture img { width: 100%; height: 100%; object-fit: cover; }
 .layout-image .slide-footer { right: 55%; }
 
-/* Layout: quote */
+/* Layout: image-left, the image layout mirrored */
+.layout-image-left { flex-direction: row-reverse; }
+.layout-image-left .frame { flex: 0 0 48%; justify-content: center; }
+.layout-image-left .picture { flex: 1; background: var(--surface); display: flex; align-items: center; justify-content: center; }
+.layout-image-left .picture img { width: 100%; height: 100%; object-fit: cover; }
+.layout-image-left .slide-footer { left: calc(52% + var(--pad-x)); }
+
+/* Layout: image-full. Text sits on a dark scrim, whatever the theme. */
+.slide.layout-image-full { --fg: #ffffff; --muted: rgba(255, 255, 255, 0.78); --accent: #ffffff; background: #000000; }
+.layout-image-full .picture { position: absolute; inset: 0; }
+.layout-image-full .picture img { width: 100%; height: 100%; object-fit: cover; }
+.layout-image-full .frame { position: relative; justify-content: flex-end; padding-bottom: 12cqh; }
+.layout-image-full .frame:has(.caption) { background: linear-gradient(to top, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0) 60%); }
+.layout-image-full .caption { max-width: 70%; }
+.layout-image-full h1, .layout-image-full h2 { font-size: 6.4cqh; margin-bottom: 0.3em; }
+.layout-image-full .slide-footer { z-index: 1; }
+
+/* Layout: quote, with an optional image beside it */
 .layout-quote .frame { justify-content: center; padding-left: 12cqw; padding-right: 12cqw; }
 .layout-quote blockquote { border: 0; padding: 0; color: var(--fg); font-size: 5.2cqh; line-height: 1.3; font-weight: 400; }
 .layout-quote blockquote::before { content: "\201C"; display: block; color: var(--accent); font-size: 3em; line-height: 0.8; height: 0.5em; }
 .layout-quote .cite { color: var(--muted); font-size: 2.8cqh; }
+.layout-quote .role { display: block; font-size: 0.85em; opacity: 0.8; padding-left: 1.1em; }
+.layout-quote:has(.picture) { flex-direction: row; }
+.layout-quote .picture { flex: 0 0 38%; }
+.layout-quote .picture img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.layout-quote:has(.picture) .frame { padding-left: 7cqw; padding-right: 8cqw; }
+.layout-quote:has(.picture) blockquote { font-size: 4.4cqh; }
+.layout-quote:has(.picture) .slide-footer { left: calc(38% + var(--pad-x)); }
+
+/* Layout: statement, one big line or number */
+.layout-statement .frame { justify-content: center; padding-left: 10cqw; padding-right: 10cqw; }
+.layout-statement .kicker { font-size: 2.6cqh; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 3cqh; }
+.layout-statement h1 { font-size: 9cqh; line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 0.35em; }
+.layout-statement h2 { font-size: 6.4cqh; line-height: 1.15; }
+.layout-statement p { font-size: 3.8cqh; color: var(--muted); max-width: 80%; }
+.layout-statement strong, .layout-statement h1 em { color: var(--accent); font-style: normal; }
+
+/* Layout: grid. Each ||| section is a card; the count sets the columns. */
+.layout-grid .grid { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(var(--cols, 3), 1fr); align-content: start; gap: 2.4cqw; }
+.layout-grid .grid-1 { --cols: 1; }
+.layout-grid .grid-2, .layout-grid .grid-4 { --cols: 2; }
+.layout-grid .grid-7, .layout-grid .grid-8 { --cols: 4; }
+.layout-grid .grid-4 .card { font-size: 0.85em; }
+.layout-grid .card { min-height: 0; overflow: hidden; }
+
+/* Layout: agenda. current: N in the frontmatter highlights item N. Six or
+ * more items flow into two columns. */
+.agenda { flex: 1; min-height: 0; }
+.agenda ol, .agenda ul { list-style: none; padding: 0; margin: 0; counter-reset: item; column-gap: 6cqw; max-width: 60%; }
+.agenda ol:has(> li:nth-child(6)), .agenda ul:has(> li:nth-child(6)) { columns: 2; max-width: none; }
+.agenda li {
+  counter-increment: item;
+  break-inside: avoid;
+  display: flex; gap: 2.4cqw; align-items: baseline;
+  margin: 0 0 1.4cqh; padding-top: 1.4cqh;
+  border-top: 1px solid var(--border);
+  font-size: 3.6cqh;
+}
+.agenda li::before { content: counter(item, decimal-leading-zero); color: var(--accent); font-weight: 600; font-size: 0.8em; min-width: 1.6em; }
+.agenda li > p { margin: 0; }
+.agenda[data-current] li { color: var(--muted); }
+.agenda[data-current="1"] li:nth-child(1), .agenda[data-current="2"] li:nth-child(2),
+.agenda[data-current="3"] li:nth-child(3), .agenda[data-current="4"] li:nth-child(4),
+.agenda[data-current="5"] li:nth-child(5), .agenda[data-current="6"] li:nth-child(6),
+.agenda[data-current="7"] li:nth-child(7), .agenda[data-current="8"] li:nth-child(8),
+.agenda[data-current="9"] li:nth-child(9), .agenda[data-current="10"] li:nth-child(10) {
+  color: var(--fg); font-weight: 600; border-top: 0.4cqh solid var(--accent);
+}
 
 /* Layout: blank */
 .layout-blank { display: block; }

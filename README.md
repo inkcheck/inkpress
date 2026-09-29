@@ -81,10 +81,21 @@ Speaker notes. Everything after the !-- line stays out of the presentation.
   | `skip` | `true` leaves the slide out |
 
   Layouts can read any other key as `.Meta.<key>`, for example `subtitle`,
-  `kicker` or `cite` in the default template.
+  `kicker`, `cite`, `role` or `current` in the default template.
 - **Tailmatter** is everything after a line that holds only `!--`. These are
   speaker notes, and they are not rendered.
 - **Columns** are separated by lines that hold only `|||`.
+- **Boxes**: Markdown between `:::` lines goes in a div. `::: box note` opens
+  `<div class="box note">`, and a bare `:::` closes it. Boxes nest, and the
+  template styles the classes. The default template has `box`, `card`,
+  `row` (blocks side by side), `stat` (a big number), `figure` (an image and
+  its caption), `gallery` (images in a row), `lead`, `muted` and `center`,
+  and the tones `note`, `tip`, `important`, `warning` and `caution`. A box
+  cannot span a `|||` line; one left open closes at the end of its column.
+- **Callouts** use GitHub's syntax: a blockquote whose first line is
+  `[!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]` or `[!CAUTION]` becomes
+  `<blockquote class="callout note">` with a `.callout-title` paragraph.
+  Text after the marker, as in `> [!TIP] Try this`, replaces the title.
 - **Markdown** is GitHub-flavoured: tables, task lists, strikethrough and
   autolinks. It also allows raw HTML. Code blocks are highlighted.
 - **Images** resolve against the slide (`../assets/chart.svg`), then the pack
@@ -109,8 +120,9 @@ Speaker notes. Everything after the !-- line stays out of the presentation.
   assets/, fonts/         anything the CSS and layouts refer to
 ```
 
-The default template has these layouts: `title`, `section`, `content`,
-`two-column`, `image`, `quote` and `blank`. It has two themes, `light` and
+The default template has these layouts: `title`, `section`, `agenda`,
+`content`, `two-column`, `grid`, `statement`, `image`, `image-left`,
+`image-full`, `quote` and `blank`. It has two themes, `light` and
 `dark`. To add the default template to an existing pack, run
 `inkpress new --template-only`.
 
