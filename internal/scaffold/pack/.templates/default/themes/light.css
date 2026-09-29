@@ -1,0 +1,11 @@
+/* Colours for the light theme. style.css uses only these properties. */
+.slide {
+  --bg: #ffffff;
+  --fg: #161616;
+  --muted: #6f6f6f;
+  --accent: #0f62fe;
+  --surface: #f4f4f4;
+  --border: #e0e0e0;
+  --section-bg: #0f62fe;
+  --section-fg: #ffffff;
+}

@@ -1,0 +1,60 @@
+{
+  "skill_name": "inkpress",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Make me a short deck for a 10 minute talk titled 'Why we moved to Postgres' by Priya Nair. Points: MySQL replication pain, JSONB replaced our document store, the migration took 6 weeks with dual writes, results were 40% lower p99 latency and one less database to run. End with a questions slide. Put it in talks/postgres and build the PDF.",
+      "expected_output": "An inkpress pack at talks/postgres with settings.toml, the default template, numbered slides using title, section/content and closing layouts, speaker notes, and a built PDF.",
+      "files": [],
+      "assertions": [
+        "talks/postgres/settings.toml sets title and author",
+        "talks/postgres/.templates/default exists",
+        "Slides are in talks/postgres/slides with zero-padded numeric prefixes",
+        "The first slide uses layout: title",
+        "Every content slide starts with a single # or ## heading",
+        "At least half of the content slides have speaker notes after a ??? line",
+        "No content slide has more than 6 bullets",
+        "inkpress pdf talks/postgres succeeds and the PDF exists",
+        "None of the sample slides from inkpress new remain"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Turn this into slides, two-column where it compares things, and make the last slide dark:\n\n# Build vs buy for search\n\nBuild: full control, fits our data model, needs 2 engineers for a quarter, we own the on-call.\nBuy (Algolia): live in two weeks, per-request pricing gets expensive past 50M queries, limited ranking control.\n\nRecommendation: buy now, revisit at 30M queries/month.\n\nNotes for me: mention that the platform team already declined to own it.",
+      "expected_output": "A pack with a comparison slide using the two-column layout split by |||, a recommendation slide with theme: dark, and the personal note placed in speaker notes, not on a slide.",
+      "files": [],
+      "assertions": [
+        "A slide uses layout: two-column with a ||| line between Build and Buy",
+        "The last slide (by filename order) sets theme: dark",
+        "The platform-team remark appears only after a ??? line",
+        "inkpress pdf succeeds"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "In my deck in ./deck, add a slide after the architecture overview showing the request flow: browser to CDN to API to queue to worker to database, as a diagram.",
+      "expected_output": "A new slide file ordered right after the architecture overview slide, with an inkline flowchart or architecture block, rendered in the PDF.",
+      "files": [],
+      "assertions": [
+        "The new slide's filename sorts directly after the architecture overview slide",
+        "The slide contains a ```inkline block (or ```d2 with an inkline header)",
+        "The inkline header does not set theme",
+        "inkpress pdf ./deck succeeds without an 'inkline not found' warning when inkline is installed"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Add a 'metrics' layout to our template: a heading, then up to four big numbers in a row, each with a small label under it. Use it on slide 05.",
+      "expected_output": "A new layouts/metrics.html in the template and CSS for it in style.css using cqh units and theme variables, with slide 05 switched to layout: metrics.",
+      "files": [],
+      "assertions": [
+        "A file .templates/<name>/layouts/metrics.html exists",
+        "style.css has .layout-metrics rules",
+        "The new CSS sizes text in cqh or cqw, not px",
+        "The new CSS uses theme custom properties (var(--…)) instead of fixed colours",
+        "Slide 05 sets layout: metrics",
+        "inkpress pdf succeeds"
+      ]
+    }
+  ]
+}

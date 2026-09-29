@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 720">
+  <rect width="640" height="720" fill="#e5f6ff"/>
+  <g fill="#0f62fe">
+    <rect x="80" y="420" width="80" height="220"/>
+    <rect x="200" y="330" width="80" height="310"/>
+    <rect x="320" y="250" width="80" height="390"/>
+    <rect x="440" y="130" width="80" height="510"/>
+  </g>
+  <line x1="60" y1="640" x2="580" y2="640" stroke="#161616" stroke-width="3"/>
+  <text x="80" y="90" font-family="sans-serif" font-size="34" font-weight="600" fill="#161616">Adoption, by quarter</text>
+</svg>

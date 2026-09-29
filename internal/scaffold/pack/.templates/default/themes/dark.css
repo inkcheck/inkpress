@@ -1,0 +1,11 @@
+/* Colours for the dark theme. style.css uses only these properties. */
+.slide {
+  --bg: #161616;
+  --fg: #f4f4f4;
+  --muted: #a8a8a8;
+  --accent: #78a9ff;
+  --surface: #262626;
+  --border: #393939;
+  --section-bg: #002d9c;
+  --section-fg: #ffffff;
+}

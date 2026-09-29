@@ -1,0 +1,8 @@
+<div class="frame">
+  <span class="logo" aria-hidden="true"></span>
+  <div class="title-block">
+    {{.Content}}
+    {{with .Meta.subtitle}}<p class="subtitle">{{.}}</p>{{end}}
+  </div>
+  <p class="byline">{{.Deck.Author}}{{if and .Deck.Author .Deck.Date}} · {{end}}{{.Deck.Date}}</p>
+</div>

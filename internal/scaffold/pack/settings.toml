@@ -1,0 +1,22 @@
+# Deck settings. Every key is optional.
+
+title = "Inkpress"
+author = "Your Name"
+date = "2026"
+
+# The template pack in .templates/, and its theme. A slide's frontmatter
+# can pick another template or theme.
+template = "default"
+theme = "light"
+
+# PDF path, relative to this directory. Default: <directory name>.pdf.
+# output = "deck.pdf"
+
+[page]
+# Slide width in CSS pixels (96 per inch), and the aspect ratio: 16:9,
+# 16:10, 4:3 or any W:H. Or set height instead of aspect.
+width = 1280
+aspect = "16:9"
+
+# Anything under [meta] reaches templates as .Deck.Meta.
+[meta]

@@ -1,0 +1,10 @@
+bin/
+dist/
+*.pdf
+*.html
+!internal/scaffold/pack/.templates/**/*.html
+.DS_Store
+examples/
+
+# Release secrets (see .env.release.example).
+.env.release

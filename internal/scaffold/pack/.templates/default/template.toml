@@ -1,0 +1,12 @@
+# The default inkpress template.
+description = "Clean, type-led slides in IBM Plex Sans, with light and dark themes."
+
+# Slides that name no layout use this one.
+layout = "content"
+# Used when neither the slide nor settings.toml names a theme.
+theme = "light"
+
+# Chroma style for code blocks, per theme: https://xyproto.github.io/splash/docs/
+[code_styles]
+light = "github"
+dark = "github-dark"

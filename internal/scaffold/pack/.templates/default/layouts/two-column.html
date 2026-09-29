@@ -1,0 +1,8 @@
+{{.Header}}
+<div class="frame">
+  {{with .Heading}}<div class="heading">{{.}}</div>{{end}}
+  <div class="columns">
+    {{range .Columns}}<div class="column">{{.}}</div>{{end}}
+  </div>
+</div>
+{{.Footer}}

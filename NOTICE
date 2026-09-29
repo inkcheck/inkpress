@@ -1,0 +1,9 @@
+Copyright 2026 The inkpress authors
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+inkpress redistributes IBM Plex Sans in its default template, under the SIL
+Open Font License 1.1 (see
+internal/scaffold/pack/.templates/default/fonts/LICENSE.txt).
+
+THIRD_PARTY_NOTICES.md lists everything inkpress redistributes, with licences.
