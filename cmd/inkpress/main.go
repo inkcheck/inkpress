@@ -32,7 +32,7 @@ A pack:
 
   settings.toml        title, author, template, theme, page size
   slides/*.md          one slide per file, in filename order; frontmatter
-                       picks layout and theme; notes follow a ??? line
+                       picks layout and theme; notes follow a !-- line
   assets/              images (jpg, png, svg)
   .templates/<name>/   layouts, themes, header, footer, fonts
 

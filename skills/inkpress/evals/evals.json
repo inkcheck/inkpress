@@ -12,7 +12,7 @@
         "Slides are in talks/postgres/slides with zero-padded numeric prefixes",
         "The first slide uses layout: title",
         "Every content slide starts with a single # or ## heading",
-        "At least half of the content slides have speaker notes after a ??? line",
+        "At least half of the content slides have speaker notes after a !-- line",
         "No content slide has more than 6 bullets",
         "inkpress pdf talks/postgres succeeds and the PDF exists",
         "None of the sample slides from inkpress new remain"
@@ -26,7 +26,7 @@
       "assertions": [
         "A slide uses layout: two-column with a ||| line between Build and Buy",
         "The last slide (by filename order) sets theme: dark",
-        "The platform-team remark appears only after a ??? line",
+        "The platform-team remark appears only after a !-- line",
         "inkpress pdf succeeds"
       ]
     },

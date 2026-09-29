@@ -7,7 +7,7 @@ description: Write presentations as Markdown and build them into a PDF with inkp
 
 inkpress turns a folder of Markdown slides into a PDF. Each slide is one
 Markdown file. Its frontmatter picks a layout and theme from a template pack,
-and speaker notes follow a `???` line. inkpress renders the deck to HTML, and
+and speaker notes follow a `!--` line. inkpress renders the deck to HTML, and
 an installed Chromium-based browser (Chrome, Chromium, Edge or Brave) prints
 it.
 
@@ -23,7 +23,7 @@ it.
 3. **Write one file per slide** in `slides/`, named with a sequence number:
    `01-title.md`, `02-problem.md`, `03-…`. Slides run in filename order. Leave
    gaps in the numbers (`10-`, `20-`) if the user expects to insert slides.
-4. **Put speaker notes after `???`** on every content slide when the user
+4. **Put speaker notes after `!--`** on every content slide when the user
    gives more detail than fits on the slide. Keep the slide terse and move the
    rest into the notes.
 5. **Build and check**: `inkpress list <dir>`, then `inkpress pdf <dir>`. If you
@@ -73,8 +73,8 @@ Left column
 
 Right column
 
-???
-Speaker notes: everything after the ??? line. Never rendered.
+!--
+Speaker notes: everything after the !-- line. Never rendered.
 ```
 
 - **Frontmatter**: YAML between `---` lines (or TOML between `+++` lines).
@@ -95,7 +95,7 @@ Speaker notes: everything after the ??? line. Never rendered.
 - **The leading `#` or `##` heading** becomes `.Heading`. Layouts place it
   separately from the body, so start each content slide with one heading.
 - **`|||` lines** split the body into columns.
-- **`???` line** starts the notes. It is ignored inside code blocks.
+- **`!--` line** starts the notes. It is ignored inside code blocks.
 - **Markdown** is GitHub-flavoured: tables, task lists, strikethrough,
   autolinks and raw HTML. Code blocks with a language are highlighted.
 - **Images** go in `assets/`. Refer to them as `../assets/x.png` (relative to

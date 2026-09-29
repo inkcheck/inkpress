@@ -6,6 +6,6 @@
   - Swap the template, keep the words
 - Speaker notes live next to the slide
 
-???
-Notes go after a line with three question marks.
+!--
+Notes go after a line that holds only !--.
 They never reach the PDF.

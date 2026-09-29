@@ -36,7 +36,7 @@ const (
 )
 
 // NotesMarker starts the tailmatter: every line after it is a note.
-const NotesMarker = "???"
+const NotesMarker = "!--"
 
 // ColumnMarker splits a slide body into columns.
 const ColumnMarker = "|||"

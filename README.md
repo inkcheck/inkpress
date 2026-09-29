@@ -61,8 +61,8 @@ Left column
 
 Right column
 
-???
-Speaker notes. Everything after the ??? line stays out of the presentation.
+!--
+Speaker notes. Everything after the !-- line stays out of the presentation.
 ```
 
 - **Frontmatter** is YAML between `---` lines, or TOML between `+++` lines.
@@ -82,7 +82,7 @@ Speaker notes. Everything after the ??? line stays out of the presentation.
 
   Layouts can read any other key as `.Meta.<key>`, for example `subtitle`,
   `kicker` or `cite` in the default template.
-- **Tailmatter** is everything after a line that holds only `???`. These are
+- **Tailmatter** is everything after a line that holds only `!--`. These are
   speaker notes, and they are not rendered.
 - **Columns** are separated by lines that hold only `|||`.
 - **Markdown** is GitHub-flavoured: tables, task lists, strikethrough and

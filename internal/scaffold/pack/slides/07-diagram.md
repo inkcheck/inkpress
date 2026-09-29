@@ -10,5 +10,5 @@ md -> inkpress: render
 inkpress -> pdf: print
 ```
 
-???
+!--
 inkline renders this block to SVG. Without inkline installed, the slide shows the D2 source.

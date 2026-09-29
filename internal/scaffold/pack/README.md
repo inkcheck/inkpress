@@ -32,8 +32,8 @@ Left column
 
 Right column
 
-???
-Speaker notes. Everything after ??? stays out of the slides.
+!--
+Speaker notes. Everything after !-- stays out of the slides.
 ```
 
 Frontmatter keys: `template`, `layout`, `theme`, `title`, `class` (extra CSS

@@ -6,7 +6,7 @@ import (
 )
 
 func TestParseSlideYAML(t *testing.T) {
-	s, err := ParseSlide("slides/01.md", "---\nlayout: title\nfooter: false\n---\n\n# Hello\n\nBody\n\n???\nSay hello.\n")
+	s, err := ParseSlide("slides/01.md", "---\nlayout: title\nfooter: false\n---\n\n# Hello\n\nBody\n\n!--\nSay hello.\n")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,11 +48,11 @@ func TestParseSlideUnclosed(t *testing.T) {
 }
 
 func TestNotesMarkerInCodeIsIgnored(t *testing.T) {
-	s, err := ParseSlide("x.md", "```\n???\n```\n\nText\n???\nNote")
+	s, err := ParseSlide("x.md", "```\n!--\n```\n\nText\n!--\nNote")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(s.Body, "```\n???\n```") || s.Notes != "Note" {
+	if !strings.Contains(s.Body, "```\n!--\n```") || s.Notes != "Note" {
 		t.Errorf("body %q notes %q", s.Body, s.Notes)
 	}
 }
