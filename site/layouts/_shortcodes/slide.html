@@ -1,0 +1,22 @@
+{{- /*
+Shows a slide of the sample deck, as rendered by inkpress, in the site's light
+or dark theme. Set theme to show one theme only.
+
+@param {string} name  file stem under static/slides, without the theme (e.g. boxes)
+@param {string} caption
+@param {string} theme  optional: light or dark
+
+@example {{< slide name="boxes" caption="Boxes and callouts" >}}
+*/ -}}
+{{- $name := .Get "name" -}}
+{{- $caption := .Get "caption" | default $name -}}
+{{- $theme := .Get "theme" -}}
+<figure class="inkpress-slide">
+  {{- if $theme }}
+  <img src="{{ (printf "slides/%s-%s.png" $name $theme) | relURL }}" alt="{{ $caption }}" loading="lazy">
+  {{- else }}
+  <img class="inkpress-light" src="{{ (printf "slides/%s-light.png" $name) | relURL }}" alt="{{ $caption }}" loading="lazy">
+  <img class="inkpress-dark" src="{{ (printf "slides/%s-dark.png" $name) | relURL }}" alt="{{ $caption }}" loading="lazy">
+  {{- end }}
+  <figcaption>{{ $caption | markdownify }}</figcaption>
+</figure>

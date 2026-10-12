@@ -3,6 +3,7 @@ dist/
 *.pdf
 *.html
 !internal/scaffold/pack/.templates/**/*.html
+!site/layouts/**/*.html
 .DS_Store
 examples/
 

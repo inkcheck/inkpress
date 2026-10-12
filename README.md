@@ -169,14 +169,19 @@ internal/render/      Markdown to HTML, layouts, inkline diagrams
 internal/pdf/         browser discovery and printing
 internal/scaffold/    the pack `inkpress new` writes, with the default template
 skills/inkpress/      Agent skill: teaches Claude to write decks and templates
-scripts/              notices, releases
+site/                 the docs site (Hugo); site/slides/ adds slides to the sample deck
+scripts/              notices, releases, the site's slide images
 ```
 
 ```sh
 make build            # bin/inkpress
 make test
 make demo             # examples/demo and its PDF
+make serve            # the docs site on http://localhost:1415/inkpress/
 ```
+
+The docs site is at https://inkcheck.github.io/inkpress/. Building it needs
+Hugo (extended) and pdftoppm from poppler.
 
 ## Agent skill
 

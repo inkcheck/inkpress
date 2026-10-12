@@ -1,7 +1,7 @@
 # inkpress. Run `make` or `make help` for the list of targets.
 
 .DEFAULT_GOAL := help
-.PHONY: help build test demo notices notary-setup release-check release-snapshot release clean
+.PHONY: help build test demo slides site serve notices notary-setup release-check release-snapshot release clean
 
 help: ## Show this help
 	@awk 'BEGIN { FS = ":.*## " } \
@@ -16,6 +16,15 @@ test: ## Run the tests (the PDF test needs a Chromium-based browser; -short skip
 demo: build ## Build the sample pack into examples/demo, and its PDF
 	@test -d examples/demo || bin/inkpress new examples/demo
 	bin/inkpress pdf examples/demo
+
+slides: ## Build the sample slides, light and dark, into the docs site (needs pdftoppm)
+	./scripts/render-site-slides.sh
+
+site: slides ## Build the docs site into site/public
+	cd site && hugo --gc --minify
+
+serve: slides ## Serve the docs site on http://localhost:1415/inkpress/
+	cd site && hugo server --port 1415
 
 notices: ## Regenerate THIRD_PARTY_NOTICES.md after dependency or font changes
 	./scripts/notices.sh
@@ -35,4 +44,4 @@ release: ## Sign, notarise and publish the tagged HEAD to GitHub and the Homebre
 	./scripts/release.sh publish
 
 clean: ## Remove build output
-	rm -rf bin dist examples/demo/*.pdf examples/demo/*.html
+	rm -rf bin dist examples/demo/*.pdf examples/demo/*.html site/public site/resources site/static/slides site/static/sample.pdf
