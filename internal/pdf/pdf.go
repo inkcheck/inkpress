@@ -12,8 +12,6 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/chromedp/cdproto/page"
-	cdpruntime "github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"
 )
 
@@ -102,25 +100,20 @@ func Print(ctx context.Context, path string, opts Options) ([]byte, error) {
 	}
 
 	const pxPerInch = 96
-	var buf []byte
-	var ready bool
-	err = chromedp.Run(ctx,
+	err = chromedp.Do(ctx,
 		chromedp.Navigate(u),
 		// Wait for web fonts; images are in by the load event.
-		chromedp.Evaluate(`document.fonts.ready.then(() => true)`, &ready,
-			func(p *cdpruntime.EvaluateParams) *cdpruntime.EvaluateParams { return p.WithAwaitPromise(true) }),
-		chromedp.ActionFunc(func(ctx context.Context) error {
-			var err error
-			buf, _, err = page.PrintToPDF().
-				WithPrintBackground(true).
-				WithPreferCSSPageSize(true).
-				WithPaperWidth(opts.Width / pxPerInch).
-				WithPaperHeight(opts.Height / pxPerInch).
-				WithMarginTop(0).WithMarginBottom(0).WithMarginLeft(0).WithMarginRight(0).
-				Do(ctx)
-			return err
-		}),
+		chromedp.Evaluate[chromedp.Void](`document.fonts.ready.then(() => true)`, chromedp.EvalAwaitPromise),
 	)
+	if err != nil {
+		return nil, fmt.Errorf("print with %s: %w", browser, err)
+	}
+	buf, err := chromedp.Run(ctx, chromedp.PrintToPDF(
+		chromedp.PDFPrintBackground(),
+		chromedp.PDFPreferCSSPageSize(),
+		chromedp.PDFPaper(chromedp.PaperSize{Width: opts.Width / pxPerInch, Height: opts.Height / pxPerInch}),
+		chromedp.PDFMargin(0),
+	))
 	if err != nil {
 		return nil, fmt.Errorf("print with %s: %w", browser, err)
 	}
