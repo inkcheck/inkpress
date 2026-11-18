@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/inkcheck/inkpress/internal/deck"
-	"github.com/inkcheck/inkpress/internal/scaffold"
+	"github.com/inkcheck/inkpress/deck"
+	"github.com/inkcheck/inkpress/scaffold"
 )
 
 func samplePack(t *testing.T) string {

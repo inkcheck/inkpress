@@ -1,6 +1,8 @@
 package deck
 
 import (
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -86,5 +88,28 @@ func TestSettingsUnknownKey(t *testing.T) {
 	}
 	if s.Template != DefaultTemplate {
 		t.Errorf("template = %q", s.Template)
+	}
+}
+
+func TestLoadFunc(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(dir, SlidesDir), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	slide := filepath.Join(dir, SlidesDir, "01.md")
+	if err := os.WriteFile(slide, []byte("# On disk"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	d, err := LoadFunc(dir, func(path string) ([]byte, error) {
+		if path == slide {
+			return []byte("# Unsaved"), nil
+		}
+		return os.ReadFile(path)
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := d.Slides[0].Body; got != "# Unsaved" {
+		t.Errorf("body = %q, want the text from read", got)
 	}
 }

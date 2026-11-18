@@ -8,7 +8,7 @@ import (
 
 	"github.com/alecthomas/chroma/v2/formatters/html"
 	"github.com/alecthomas/chroma/v2/styles"
-	"github.com/inkcheck/inkpress/internal/deck"
+	"github.com/inkcheck/inkpress/deck"
 	"github.com/yuin/goldmark"
 	highlighting "github.com/yuin/goldmark-highlighting/v2"
 	"github.com/yuin/goldmark/ast"

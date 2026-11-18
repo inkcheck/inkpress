@@ -12,11 +12,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/inkcheck/inkpress/internal/deck"
-	"github.com/inkcheck/inkpress/internal/pdf"
-	"github.com/inkcheck/inkpress/internal/render"
-	"github.com/inkcheck/inkpress/internal/scaffold"
-	"github.com/inkcheck/inkpress/internal/templates"
+	"github.com/inkcheck/inkpress/deck"
+	"github.com/inkcheck/inkpress/pdf"
+	"github.com/inkcheck/inkpress/render"
+	"github.com/inkcheck/inkpress/scaffold"
+	"github.com/inkcheck/inkpress/templates"
 )
 
 const usageText = `inkpress turns Markdown slides into a PDF.

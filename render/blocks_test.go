@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/inkcheck/inkpress/internal/deck"
+	"github.com/inkcheck/inkpress/deck"
 )
 
 func convert(t *testing.T, src string) string {

@@ -14,7 +14,7 @@ These files are in the repository and embedded in the inkpress binary.
 
 ### IBM Plex Sans
 
-`internal/scaffold/pack/.templates/default/fonts/*.ttf`, unmodified, from
+`scaffold/pack/.templates/default/fonts/*.ttf`, unmodified, from
 <https://github.com/IBM/plex>. Licensed under the SIL Open Font License 1.1.
 `inkpress new` copies them into new packs, and PDFs embed subsets of them,
 which the licence permits.

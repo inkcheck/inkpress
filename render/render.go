@@ -13,8 +13,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/inkcheck/inkpress/internal/deck"
-	"github.com/inkcheck/inkpress/internal/templates"
+	"github.com/inkcheck/inkpress/deck"
+	"github.com/inkcheck/inkpress/templates"
 )
 
 // Data is what layouts and partials see.
@@ -46,8 +46,27 @@ type DeckInfo struct {
 type Result struct {
 	HTML          []byte
 	Width, Height float64
+	// Slides describe the rendered slides, in order.
+	Slides []SlideResult
 	// Warnings are problems that did not stop the render.
 	Warnings []string
+}
+
+// SlideResult is one rendered slide: where it came from, and the template,
+// layout and theme it got once defaults were applied.
+type SlideResult struct {
+	// Source is the slide's path in the pack, as in deck.Slide.Path.
+	Source                         string
+	Number                         int
+	Title, Template, Layout, Theme string
+}
+
+// Options change how a deck renders.
+type Options struct {
+	// Diagrams, when set, keeps rendered diagrams between renders, so a
+	// deck that is rendered again and again, as in an editor, runs inkline
+	// only for diagrams that changed.
+	Diagrams *DiagramCache
 }
 
 type renderer struct {
@@ -56,17 +75,29 @@ type renderer struct {
 	// themes used per template, for the CSS.
 	themes   map[string]map[string]bool
 	warnings []string
+	slides   []SlideResult
 	inkline  inkline
+	cache    *DiagramCache
+	gen      int
 }
 
 // HTML renders the deck.
 func HTML(d *deck.Deck) (*Result, error) {
+	return HTMLWith(d, Options{})
+}
+
+// HTMLWith renders the deck with options.
+func HTMLWith(d *deck.Deck, opts Options) (*Result, error) {
 	w, h, err := d.Settings.Page.Size()
 	if err != nil {
 		return nil, err
 	}
-	r := &renderer{deck: d, templates: map[string]*templates.Template{}, themes: map[string]map[string]bool{}}
+	r := &renderer{deck: d, templates: map[string]*templates.Template{}, themes: map[string]map[string]bool{}, cache: opts.Diagrams}
 	defer r.inkline.cleanup()
+	if r.cache != nil {
+		r.gen = r.cache.begin()
+		defer r.cache.end()
+	}
 
 	var slides bytes.Buffer
 	for i, s := range d.Slides {
@@ -96,7 +127,7 @@ func HTML(d *deck.Deck) (*Result, error) {
 %s</body>
 </html>
 `, html.EscapeString(d.Title()), templates.FileURL(filepath.Join(d.Dir, deck.SlidesDir)), css, slides.String())
-	return &Result{HTML: doc.Bytes(), Width: w, Height: h, Warnings: r.warnings}, nil
+	return &Result{HTML: doc.Bytes(), Width: w, Height: h, Slides: r.slides, Warnings: r.warnings}, nil
 }
 
 func (r *renderer) warn(format string, args ...any) {
@@ -189,6 +220,10 @@ func (r *renderer) slide(s *deck.Slide, n int) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("%s: %w", s.Path, err)
 	}
+	r.slides = append(r.slides, SlideResult{
+		Source: s.Path, Number: n, Title: data.Title,
+		Template: name, Layout: layout, Theme: theme,
+	})
 
 	// The template and theme classes go on the page, since @scope matches
 	// only inside its root; the slide is then in scope for .slide rules.

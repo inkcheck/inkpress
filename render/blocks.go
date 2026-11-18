@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/inkcheck/inkpress/internal/deck"
+	"github.com/inkcheck/inkpress/deck"
 	"github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/text"

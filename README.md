@@ -163,11 +163,11 @@ browser.
 
 ```
 cmd/inkpress/         CLI
-internal/deck/        settings, slide parsing (frontmatter, notes, columns), loading
-internal/templates/   template packs, CSS scoping
-internal/render/      Markdown to HTML, layouts, inkline diagrams
-internal/pdf/         browser discovery and printing
-internal/scaffold/    the pack `inkpress new` writes, with the default template
+deck/                 settings, slide parsing (frontmatter, notes, columns), loading
+templates/            template packs, CSS scoping
+render/               Markdown to HTML, layouts, inkline diagrams
+pdf/                  browser discovery and printing
+scaffold/             the pack `inkpress new` writes, with the default template
 skills/inkpress/      Agent skill: teaches Claude to write decks and templates
 site/                 the docs site (Hugo); site/slides/ adds slides to the sample deck
 scripts/              notices, releases, the site's slide images

@@ -8,8 +8,9 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
 
-	"github.com/inkcheck/inkpress/internal/deck"
+	"github.com/inkcheck/inkpress/deck"
 )
 
 // Diagrams come from inkline (https://github.com/inkcheck/inkline), run as a
@@ -104,6 +105,15 @@ func (r *renderer) diagram(s *deck.Slide, src, theme string) (string, error) {
 	if !strings.Contains(src, "inkline:") {
 		src = strings.Replace(src, "verf:", "inkline:", 1)
 	}
+	var themeArgs []string
+	// Match a light or dark slide, unless the diagram picks its own theme.
+	if (theme == "light" || theme == "dark") && !strings.Contains(src, "theme:") {
+		themeArgs = []string{"--theme", theme}
+	}
+	key := cacheKey(bin, s.Path, src, themeArgs)
+	if fig, ok := r.cache.get(key, r.gen); ok {
+		return fig, nil
+	}
 	// Icons in the diagram resolve against the D2 file's directory, so the
 	// file goes next to the slide.
 	sum := sha256.Sum256([]byte(src))
@@ -121,12 +131,7 @@ func (r *renderer) diagram(s *deck.Slide, src, theme string) (string, error) {
 	}
 	out := filepath.Join(r.inkline.tmp, fmt.Sprintf("%x.svg", sum[:6]))
 
-	args := []string{"render", "-o", out}
-	// Match a light or dark slide, unless the diagram picks its own theme.
-	if (theme == "light" || theme == "dark") && !strings.Contains(src, "theme:") {
-		args = append(args, "--theme", theme)
-	}
-	args = append(args, in)
+	args := append(append([]string{"render", "-o", out}, themeArgs...), in)
 	if msg, err := exec.Command(bin, args...).CombinedOutput(); err != nil {
 		return "", fmt.Errorf("%s: diagram: %s", s.Path, strings.TrimSpace(strings.ReplaceAll(string(msg), in, "block")))
 	}
@@ -135,6 +140,100 @@ func (r *renderer) diagram(s *deck.Slide, src, theme string) (string, error) {
 		return "", err
 	}
 	// An <img>, not inline SVG, keeps each diagram's IDs and styles apart.
-	return fmt.Sprintf(`<figure class="diagram"><img src="data:image/svg+xml;base64,%s" alt=""></figure>`,
-		base64.StdEncoding.EncodeToString(svg)), nil
+	fig := fmt.Sprintf(`<figure class="diagram"><img src="data:image/svg+xml;base64,%s" alt=""></figure>`,
+		base64.StdEncoding.EncodeToString(svg))
+	r.cache.put(key, fig, r.gen)
+	return fig, nil
+}
+
+// DiagramCache keeps rendered diagrams between renders of a deck. Once no
+// render is running, it drops the diagrams the newest render did not use, so
+// it holds about one deck's diagrams. It is safe for concurrent use. Files a
+// diagram refers to, such as icons, are not part of the key: call Reset when
+// they change.
+type DiagramCache struct {
+	mu      sync.Mutex
+	figures map[string]cached
+	gen     int // the newest render
+	running int
+}
+
+type cached struct {
+	figure string
+	gen    int // the newest render that used it
+}
+
+// NewDiagramCache returns an empty cache.
+func NewDiagramCache() *DiagramCache {
+	return &DiagramCache{figures: map[string]cached{}}
+}
+
+// Reset empties the cache.
+func (c *DiagramCache) Reset() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	clear(c.figures)
+}
+
+// Len is the number of diagrams in the cache.
+func (c *DiagramCache) Len() int {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return len(c.figures)
+}
+
+func cacheKey(bin, slide, src string, args []string) string {
+	h := sha256.New()
+	// The slide's directory matters, since icons resolve against it.
+	for _, part := range append([]string{bin, filepath.Dir(slide), src}, args...) {
+		h.Write([]byte(part))
+		h.Write([]byte{0})
+	}
+	return fmt.Sprintf("%x", h.Sum(nil))
+}
+
+// begin starts a render and returns its generation.
+func (c *DiagramCache) begin() int {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.gen++
+	c.running++
+	return c.gen
+}
+
+func (c *DiagramCache) end() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.running--
+	if c.running > 0 {
+		return
+	}
+	for k, f := range c.figures {
+		if f.gen < c.gen {
+			delete(c.figures, k)
+		}
+	}
+}
+
+func (c *DiagramCache) get(key string, gen int) (string, bool) {
+	if c == nil {
+		return "", false
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	f, ok := c.figures[key]
+	if ok {
+		f.gen = max(f.gen, gen)
+		c.figures[key] = f
+	}
+	return f.figure, ok
+}
+
+func (c *DiagramCache) put(key, fig string, gen int) {
+	if c == nil {
+		return
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.figures[key] = cached{figure: fig, gen: max(c.figures[key].gen, gen)}
 }

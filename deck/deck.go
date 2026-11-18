@@ -27,13 +27,24 @@ const (
 
 // Load reads the pack in dir.
 func Load(dir string) (*Deck, error) {
+	return LoadFunc(dir, os.ReadFile)
+}
+
+// ReadFunc reads a file of the pack, given its absolute path. It returns an
+// error satisfying os.IsNotExist for a missing file.
+type ReadFunc func(path string) ([]byte, error)
+
+// LoadFunc reads the pack in dir like Load, but reads settings.toml and the
+// slides with read. An editor can pass a read that returns unsaved text. The
+// slides directory is still listed from disk.
+func LoadFunc(dir string, read ReadFunc) (*Deck, error) {
 	abs, err := filepath.Abs(dir)
 	if err != nil {
 		return nil, err
 	}
 	d := &Deck{Dir: abs}
 
-	text, err := os.ReadFile(filepath.Join(abs, SettingsFile))
+	text, err := read(filepath.Join(abs, SettingsFile))
 	switch {
 	case os.IsNotExist(err):
 		// Every setting has a default.
@@ -58,7 +69,7 @@ func Load(dir string) (*Deck, error) {
 	sort.Strings(names)
 	for _, name := range names {
 		path := filepath.Join(abs, SlidesDir, name)
-		text, err := os.ReadFile(path)
+		text, err := read(path)
 		if err != nil {
 			return nil, err
 		}
