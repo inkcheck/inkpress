@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/inkcheck/inkpress/deck"
+	"github.com/inkcheck/inkpress/inkdeck"
 	"github.com/inkcheck/inkpress/pdf"
 	"github.com/inkcheck/inkpress/render"
 	"github.com/inkcheck/inkpress/scaffold"
@@ -26,6 +27,7 @@ Usage:
   inkpress pdf [flags] [dir]             build the PDF (default dir: .)
   inkpress html [flags] [dir]            build an HTML preview
   inkpress list [dir]                    list the slides, their layouts and themes
+  inkpress share [flags] [dir]           zip the pack into one .inkdeck file, to send
   inkpress version                       print the version
 
 A pack:
@@ -84,7 +86,7 @@ func run(args []string) error {
 	case "version", "--version", "-v":
 		fmt.Println("inkpress", versionString())
 		return nil
-	case "new", "pdf", "html", "list":
+	case "new", "pdf", "html", "list", "share":
 	default:
 		fmt.Fprint(os.Stderr, usageText)
 		return fmt.Errorf("unknown command %q", cmd)
@@ -102,6 +104,8 @@ func run(args []string) error {
 		timeout = fl.Duration("timeout", 2*time.Minute, "give up printing after this long")
 	case "html":
 		out = fl.String("o", "", "output HTML (default: <dir name>.html in the pack)")
+	case "share":
+		out = fl.String("o", "", "output .inkdeck (default: <dir name>.inkdeck in the pack)")
 	case "new":
 		templateOnly = fl.Bool("template-only", false, "write only .templates/default, into an existing pack")
 	}
@@ -135,6 +139,8 @@ func run(args []string) error {
 		return nil
 	case "list":
 		return list(dir)
+	case "share":
+		return share(dir, *out)
 	}
 
 	d, err := deck.Load(dir)
@@ -222,6 +228,23 @@ func parseArgs(fl *flag.FlagSet, args []string) ([]string, error) {
 		}
 	}
 	return files, nil
+}
+
+// share zips the pack into an .inkdeck.
+func share(dir, out string) error {
+	d, err := deck.Load(dir)
+	if err != nil {
+		return err
+	}
+	if out == "" {
+		out = filepath.Join(d.Dir, filepath.Base(d.Dir)+inkdeck.Ext)
+	}
+	n, err := inkdeck.Share(d.Dir, out)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%s (%d files)\n", out, n)
+	return nil
 }
 
 // list prints each slide with its template, layout and theme.

@@ -13,6 +13,7 @@ inkpress new talk          # a sample pack with the default template
 inkpress pdf talk          # -> talk/talk.pdf
 inkpress html talk         # -> talk/talk.html, a preview for the browser
 inkpress list talk         # slides in order, with template/layout/theme
+inkpress share talk        # -> talk/talk.inkdeck, the whole pack in one file
 ```
 
 ## A presentation pack

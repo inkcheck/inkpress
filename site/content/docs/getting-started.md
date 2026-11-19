@@ -36,6 +36,7 @@ layouts, boxes, code, images and a diagram, and the default template in
 inkpress pdf talk          # -> talk/talk.pdf
 inkpress html talk         # -> talk/talk.html, a preview for the browser
 inkpress list talk         # slides in order, with template/layout/theme
+inkpress share talk        # -> talk/talk.inkdeck, the whole pack in one file
 ```
 
 [Download the sample deck as a PDF](../../sample.pdf). It is the sample pack

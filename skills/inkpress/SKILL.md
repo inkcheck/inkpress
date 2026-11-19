@@ -208,6 +208,7 @@ inkpress new --template-only [dir]  # add .templates/default to an existing pack
 inkpress list [dir]                 # slides in order: template/layout/theme, notes
 inkpress pdf [dir] [-o out.pdf] [--browser path] [--timeout 2m]
 inkpress html [dir] [-o out.html]   # preview; open it in a browser
+inkpress share [dir] [-o out.inkdeck] # the whole pack in one zip, to send
 ```
 
 - Flags and the directory go in any order. The directory defaults to `.`.
